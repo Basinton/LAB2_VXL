@@ -268,19 +268,10 @@ int main(void) {
 		}
 		//first led 7seg display hour info
 		time_info[0] = hour / 10;
-		if (hour <= 10) {
-			//if hour <= 10, the second led 7seg displays same data
-			time_info[1] = hour;
-		} else {
-			time_info[1] = hour % 10;
-		}
-		//same as displaying hour
+		time_info[1] = hour % 10;
+		//display minute same as displaying hour
 		time_info[2] = minute / 10;
-		if (minute <= 10) {
-			time_info[3] = minute;
-		} else {
-			time_info[3] = minute % 10;
-		}
+		time_info[3] = minute % 10;
 		//reset led index
 		if (index >= 4) {
 			index = 0;
