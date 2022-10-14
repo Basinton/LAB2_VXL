@@ -56,27 +56,16 @@ static void MX_TIM2_Init(void);
 /* USER CODE BEGIN 0 */
 int timer0_counter = 0;
 int timer0_flag = 0;
-int timer1_counter = 0;
-int timer1_flag = 0;
 int TIMER_CYCLE = 10;
 void setTimer0(int duration) {
 	timer0_counter = duration / TIMER_CYCLE;
 	timer0_flag = 0;
-}
-void setTimer1(int duration) {
-	timer1_counter = duration / TIMER_CYCLE;
-	timer1_flag = 0;
 }
 void timer_run() {
 	if (timer0_counter > 0) {
 		timer0_counter--;
 		if (timer0_counter == 0)
 			timer0_flag = 1;
-	}
-	if (timer1_counter > 0) {
-		timer1_counter--;
-		if (timer1_counter == 0)
-			timer1_flag = 1;
 	}
 }
 
@@ -221,23 +210,17 @@ void update7SEG(int index, int data) {
 	}
 }
 
-void updateClockBuffer(int data[], int index) {
-	if (index == 0) {
-		//update led 7seg [0] with data from main
-		update7SEG(0, data[0]);
-	}
-	if (index == 1) {
-		//update led 7seg [1] with data from main
-		update7SEG(1, data[1]);
-	}
-	if (index == 2) {
-		//update led 7seg [2] with data from main
-		update7SEG(2, data[2]);
-	}
-	if (index == 3) {
-		//update led 7seg [3] with data from main
-		update7SEG(3, data[3]);
-	}
+int time_info[4] = { 0, 0, 0, 0 };
+static int led_buffer[4] = { 0, 0, 0, 0 };
+int* updateClockBuffer(int hour, int minute) {
+	//first led 7seg display hour info
+	time_info[0] = hour / 10;
+	time_info[1] = hour % 10;
+	//display minute same as displaying hour
+	time_info[2] = minute / 10;
+	time_info[3] = minute % 10;
+
+	return time_info;
 }
 /* USER CODE END 0 */
 
@@ -277,10 +260,7 @@ int main(void) {
 	/* USER CODE BEGIN WHILE */
 	//Init time
 	int hour = 15, minute = 8, second = 50;
-	int time_info[4];
-	int index = 0;
 	setTimer0(1000);
-	setTimer1(500);
 	while (1) {
 		if (timer0_flag == 1) {
 			setTimer0(1000);
@@ -299,21 +279,15 @@ int main(void) {
 			}
 			//Toggle DOT led
 			HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
-		}
-		if (timer1_flag == 1) {
-			setTimer1(500);
-			//first led 7seg display hour info
-			time_info[0] = hour / 10;
-			time_info[1] = hour % 10;
-			//display minute same as displaying hour
-			time_info[2] = minute / 10;
-			time_info[3] = minute % 10;
-			//reset led index
-			if (index >= 4) {
-				index = 0;
-			}
+
+			int *buffer;
 			//call function to update time info
-			updateClockBuffer(time_info, index++);
+			buffer = updateClockBuffer(hour, minute);
+			//update led buffers
+			led_buffer[0] = buffer[0];
+			led_buffer[1] = buffer[1];
+			led_buffer[2] = buffer[2];
+			led_buffer[3] = buffer[3];
 		}
 	}
 	/* USER CODE END WHILE */
@@ -441,32 +415,24 @@ static void MX_GPIO_Init(void) {
 
 /* USER CODE BEGIN 4 */
 //Init values
-//const int MAX_LED = 4;
-//int index_led = 0;
-//int led_buffer[4] = { 1, 2, 3, 0 };
-////cycle = 10ms
-//int counter = 25;
-//int sec_counter = 100;
-//int status = 0;
+const int MAX_LED = 4;
+int index_led = 0;
+//cycle = 10ms
+int counter = 25;
+int time_index = 0;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 	timer_run();
-	//after 100 cycles, time is 1s
-//	if (sec_counter <= 0) {
-//		sec_counter = 100;
-//		HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
-//	}
 
-//after 25 cycles, time is 0.25s
-//	if (counter <= 0) {
-//		counter = 25;
-//
-//		if (index_led >= MAX_LED) {
-//			index_led = 0;
-//		}
-//		update7SEG(index_led++);
-//	}
-//	sec_counter--;
-//	counter--;
+	if (counter <= 0) {
+		counter = 25;
+
+		if (index_led >= MAX_LED) {
+			index_led = 0;
+			time_index = 0;
+		}
+		update7SEG(index_led++, led_buffer[time_index++]);
+	}
+	counter--;
 }
 /* USER CODE END 4 */
 

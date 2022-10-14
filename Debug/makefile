@@ -63,8 +63,8 @@ all: main-build
 main-build: bai7.elf secondary-outputs
 
 # Tool invocations
-bai7.elf bai7.map: $(OBJS) $(USER_OBJS) C:\Hoc\ tap\VXL\STM32\Lab2\bai6\bai6\STM32F103C6UX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "bai7.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Hoc tap\VXL\STM32\Lab2\bai6\bai6\STM32F103C6UX_FLASH.ld" --specs=nosys.specs -Wl,-Map="bai7.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+bai7.elf bai7.map: $(OBJS) $(USER_OBJS) C:\Hoc\ tap\VXL\STM32\Lab2\bai7\bai7\STM32F103C6UX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "bai7.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Hoc tap\VXL\STM32\Lab2\bai7\bai7\STM32F103C6UX_FLASH.ld" --specs=nosys.specs -Wl,-Map="bai7.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
