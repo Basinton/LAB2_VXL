@@ -1,0 +1,17 @@
+../Core/Src/main.c:64:6:setTimer0	16	static
+../Core/Src/main.c:68:6:setTimer1	16	static
+../Core/Src/main.c:72:6:setTimer2	16	static
+../Core/Src/main.c:76:6:timer_run	4	static
+../Core/Src/main.c:94:6:display7SEG	16	static
+../Core/Src/main.c:196:6:update7SEG	16	static
+../Core/Src/main.c:237:6:updateClockBuffer	16	static
+../Core/Src/main.c:248:6:clearLEDMatrix	8	static
+../Core/Src/main.c:260:6:displayLEDMatrix	16	static
+../Core/Src/main.c:276:6:updateLEDMatrix	16	static
+../Core/Src/main.c:326:6:ledMatrixEffect	16	static
+../Core/Src/main.c:338:5:main	40	static
+../Core/Src/main.c:436:6:SystemClock_Config	72	static
+../Core/Src/main.c:470:13:MX_TIM2_Init	32	static
+../Core/Src/main.c:512:13:MX_GPIO_Init	32	static
+../Core/Src/main.c:560:6:HAL_TIM_PeriodElapsedCallback	16	static
+../Core/Src/main.c:569:6:Error_Handler	4	static,ignoring_inline_asm
